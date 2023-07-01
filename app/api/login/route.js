@@ -1,34 +1,32 @@
 import { connectToDatabase } from "../../../utils/mongodb";
 import bcrypt from "bcrypt";
+import User from "../../../models/User";
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).end();
+// Named export for the API route
+export async function POST(req) {
+  await connectToDatabase();
+  const { username, password } = await req.json();
+
+  // Find the user in the database
+  const user = await User.findOne({ username });
+
+  // If user does not exist or password is incorrect, return an error response
+  if (!user || !(await bcrypt.compare(password.toString(), user.password))) {
+    return new Response({
+      status: 401,
+      statusText: "Invalid login credentials",
+    });
   }
 
-  const { db } = await connectToDatabase();
-  const { username, password } = req.body;
+  // ...code to handle session or token generation ...
 
-  // Find the user
-  const user = await db.collection("users").findOne({ username });
-  if (!user) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Invalid username or password" });
-  }
-
-  // Check if the password is correct
-  const isPasswordCorrect = await bcrypt.compare(password, user.password);
-  if (!isPasswordCorrect) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Invalid username or password" });
-  }
-
-  // Here you can create a session or a token for the authenticated user
-  // ...
-
-  res
-    .status(200)
-    .json({ success: true, message: "User authenticated successfully" });
+  // Return success response
+  let options = {
+    status: 200,
+  };
+  let responseJSON = new Response(
+    JSON.stringify({ message: "Login successful" }),
+    options
+  );
+  return responseJSON;
 }
