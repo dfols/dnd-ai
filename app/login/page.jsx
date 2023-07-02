@@ -31,26 +31,57 @@ export default function LoginPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-10 text-center">
-      <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        value={formData.username}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        required
-      />
-      <button type="submit" className="btn btn-primary">
-        Login
-      </button>
-    </form>
+    <div className="container mx-auto flex justify-center items-center h-screen">
+      <form
+        onSubmit={handleSubmit}
+        className="relative p-10 space-y-4 bg-white rounded shadow-lg w-3/4"
+      >
+        <h2 className="orange_gradient text-center text-4xl font-bold mb-8">
+          Login
+        </h2>
+        <div className="flex flex-col space-y-4">
+          {/* Input Fields */}
+          <div className="flex space-x-4">
+            <label htmlFor="username" className="w-1/4">
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              className="border p-2 w-3/4"
+            />
+          </div>
+          <div className="flex space-x-4">
+            <label htmlFor="password" className="w-1/4">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="border p-2 w-3/4"
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-center mt-4">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
